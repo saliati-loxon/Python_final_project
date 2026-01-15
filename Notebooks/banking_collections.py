@@ -73,13 +73,21 @@ with col1:
     st.subheader("Q1: Portfolio Overview")
     loan_counts = filtered_data['Loan_Type'].value_counts().reset_index()
     loan_counts.columns = ['Loan_Type', 'Count']
-    fig1 = px.pie(loan_counts, values='Count', names='Loan_Type', hole=0.6)
+    fig1 = px.pie(loan_counts, 
+                  values='Count',
+                  names='Loan_Type',
+                  hole=0.6,
+                  labels={'Loan_Type': 'Loan Type', 'Count': 'Number of Loans'})
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     st.subheader("Q2: Debt by Region")
     region_debt = filtered_data.groupby('Region')['Outstanding_Amount'].sum().reset_index()
-    fig2 = px.bar(region_debt, x='Region', y='Outstanding_Amount', color='Outstanding_Amount')
+    fig2 = px.bar(region_debt,
+                  x='Region',
+                  y='Outstanding_Amount',
+                  color='Outstanding_Amount',
+                  labels={'Region': 'Region', 'Outstanding_Amount': 'Total Outstanding Amount'})
     st.plotly_chart(fig2, use_container_width=True)
 
 ## 2nd row
@@ -88,15 +96,20 @@ with col3:
     st.subheader("Q3: Payment Status Breakdown")
     status_counts = filtered_data['Payment_Status'].value_counts().reset_index()
     status_counts.columns = ['Payment_Status', 'Count']
-    fig3 = px.bar(status_counts, x='Count', y='Payment_Status', orientation='h', color='Payment_Status', 
-                  color_discrete_map=color_mapping)
+    fig3 = px.bar(status_counts,
+                  x='Count',
+                  y='Payment_Status',
+                  orientation='h',
+                  color='Payment_Status',
+                  color_discrete_map=color_mapping,
+                  labels={'Payment_Status': 'Payment Status', 'Count': 'Number of Loans'})
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
-    st.subheader("Q9: Status by Account Type")
-    # Using your sorting logic
+    st.subheader("Q4: Status by Account Type")
+    # Using sorting logic
     acct_status = filtered_data.groupby(['Account_Type', 'Payment_Status']).size().reset_index(name='Count')
-    fig9 = px.bar(
+    fig4 = px.bar(
         acct_status, 
         x='Account_Type', 
         y='Count', 
@@ -104,28 +117,27 @@ with col4:
         barmode='group',
         category_orders={'Account_Type': ["Current", "Credit", "Savings"]}
     )
-    st.plotly_chart(fig9, use_container_width=True)
+    st.plotly_chart(fig4, use_container_width=True)
 
 ## 3rd row
 col5, col6 = st.columns(2)
 
 with col5:
-    st.subheader("Q4: Outstanding Debt by Risk Level")
+    st.subheader("Q5: Outstanding Debt by Risk Level")
     risk_debt = filtered_data.groupby('Risk_Level')['Outstanding_Amount'].sum().reset_index()
     
-    fig4 = px.bar(
+    fig5 = px.bar(
         risk_debt,
         x='Risk_Level',
         y='Outstanding_Amount',
         color='Risk_Level',
         category_orders={'Risk_Level': ['Low', 'Medium', 'High']},
-        text_auto='.2s'
-    )
-    st.plotly_chart(fig4, use_container_width=True)
+        text_auto='.2s')
+    st.plotly_chart(fig5, use_container_width=True)
 
 with col6:
-    st.subheader("Q5: Customer Score vs. Payment Delay")
-    fig5 = px.scatter(
+    st.subheader("Q6: Customer Score vs. Payment Delay")
+    fig6 = px.scatter(
         filtered_data,
         x='Customer_Score',
         y='Payment_Delay_Days',
@@ -134,33 +146,33 @@ with col6:
         opacity=0.6,
         hover_data=['Loan_Type']
     )
-    st.plotly_chart(fig5, use_container_width=True)
+    st.plotly_chart(fig6, use_container_width=True)
 
 ## 4th row
 col7, col8 = st.columns(2)
 with col7:
-    st.subheader("Q6: EMI Amount Distribution by Status")
-    fig6 = px.box(
+    st.subheader("Q7: EMI Amount Distribution by Status")
+    fig7 = px.box(
         filtered_data,
         x='Payment_Status',
         y='EMI_Amount',
         color='Payment_Status',
         points='outliers'
     )
-    st.plotly_chart(fig6, use_container_width=True)
+    st.plotly_chart(fig7, use_container_width=True)
 
 with col8:
-    st.subheader("Q7: Avg Payment Delay by Loan Type")
+    st.subheader("Q8: Avg Payment Delay by Loan Type")
     avg_delay = filtered_data.groupby('Loan_Type')['Payment_Delay_Days'].mean().reset_index()
     
-    fig7 = px.bar(
+    fig8 = px.bar(
         avg_delay,
         x='Loan_Type',
         y='Payment_Delay_Days',
         color='Payment_Delay_Days',
         color_continuous_scale='Viridis'
     )
-    st.plotly_chart(fig7, use_container_width=True)
+    st.plotly_chart(fig8, use_container_width=True)
 
 st.markdown("---")
 st.header("Operational Performance")
@@ -168,10 +180,10 @@ st.header("Operational Performance")
 ## 5th row
 col9, col10 = st.columns(2)
 with col9:
-    st.subheader("Q8: Top 10 Collection Agents (Repaid)")
+    st.subheader("Q9: Top 10 Collection Agents (Repaid)")
     agent_perf = filtered_data.groupby('Collection_Agent')['Paid_Amount'].sum().nlargest(15).reset_index().sort_values(by='Paid_Amount', ascending=False)
     
-    fig8 = px.bar(
+    fig9 = px.bar(
         agent_perf,
         x='Paid_Amount',
         y='Collection_Agent',
@@ -179,8 +191,8 @@ with col9:
         text_auto='.2s',
         color='Paid_Amount'
     )
-    fig8.update_layout(yaxis={'categoryorder':'total ascending'})
-    st.plotly_chart(fig8, use_container_width=True)
+    fig9.update_layout(yaxis={'categoryorder':'total ascending'})
+    st.plotly_chart(fig9, use_container_width=True)
 
 with col10:
     st.subheader("Q10: Avg Past Due Days (Region vs Loan type)")
