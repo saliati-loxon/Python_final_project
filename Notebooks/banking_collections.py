@@ -13,7 +13,7 @@ st.title("🏦 Banking Collections Dashboard")
 st.markdown("Analysis of loan portfolio health, risk factors, and operational efficiency.")
 
 # --- 2. Load Data ---
-collections = pd.read_csv("../data/banking_collections_dataset.csv")
+collections = pd.read_csv("banking_collections_dataset.csv")
 
 # --- 3. Data cleaning and feature engineering ---
 ## Convert Date columns to standard Datetime format
